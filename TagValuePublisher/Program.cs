@@ -13,6 +13,7 @@ namespace TagValuePublisher
         private const string DefaultSchemaRegistryUrl = "http://localhost:8081";
         private const string DefaultTopicName = "tag-values";
         private const string DefaultIntervalInSeconds = "1";
+        private const string DefaultTagsCount = "3";
         private const int MillisecondsInOneSecond = 1000;
 
         private static readonly string BootstrapServers =
@@ -23,6 +24,8 @@ namespace TagValuePublisher
             Environment.GetEnvironmentVariable("KAFKA_TOPIC_NAME") ?? DefaultTopicName;
         private static readonly int IntervalInSeconds = 
             int.Parse(Environment.GetEnvironmentVariable("INTERVAL") ?? DefaultIntervalInSeconds);
+        private static readonly int TagsCount = 
+            int.Parse(Environment.GetEnvironmentVariable("TAGS_COUNT") ?? DefaultTagsCount);
 
         static void Main(string[] args)
         {
@@ -50,24 +53,27 @@ namespace TagValuePublisher
                 Console.WriteLine($"Producer [{producer.Name}] producing on topic [{TopicName}] in every [{IntervalInSeconds}] seconds.");
                 while (true)
                 {
-                    var tagValue = new TagNumericValue
+                    for (var i = 1; i <= TagsCount; i++)
                     {
-                        tagName = "DummyTagName", 
-                        tagValue = rnd.NextDouble(),
-                        timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()
-                    };
-                    producer
-                        .ProduceAsync(TopicName, new Message<string, TagNumericValue>
+                        var tagValue = new TagNumericValue
                         {
-                            Key = tagValue.tagName, 
-                            Value = tagValue
-                        })
-                        .ContinueWith(task =>
-                        {
-                            Console.WriteLine(!task.IsFaulted
-                                ? $"produced to: {task.Result.TopicPartitionOffset}"
-                                : $"error producing message: {task.Exception}");
-                        });
+                            tagName = $"Tag-{i}", 
+                            tagValue = rnd.NextDouble(),
+                            measureTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()
+                        };
+                        producer
+                            .ProduceAsync(TopicName, new Message<string, TagNumericValue>
+                            {
+                                Key = tagValue.tagName, 
+                                Value = tagValue
+                            })
+                            .ContinueWith(task =>
+                            {
+                                Console.WriteLine(!task.IsFaulted
+                                    ? $"produced to: {task.Result.TopicPartitionOffset}"
+                                    : $"error producing message: {task.Exception}");
+                            });
+                    }
                     Thread.Sleep(IntervalInSeconds * MillisecondsInOneSecond);
                 }
             }

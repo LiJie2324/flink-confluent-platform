@@ -17,10 +17,10 @@ namespace schneider.poem.models
 	{
 		public static Schema _SCHEMA = Avro.Schema.Parse("{\"type\":\"record\",\"name\":\"TagNumericValue\",\"namespace\":\"schneider.poem.models\",\"fi" +
 				"elds\":[{\"name\":\"tagName\",\"type\":\"string\"},{\"name\":\"tagValue\",\"type\":\"double\"},{\"" +
-				"name\":\"timestamp\",\"type\":\"long\"}]}");
+				"name\":\"measureTime\",\"type\":\"long\"}]}");
 		private string _tagName;
 		private double _tagValue;
-		private long _timestamp;
+		private long _measureTime;
 		public virtual Schema Schema
 		{
 			get
@@ -50,15 +50,15 @@ namespace schneider.poem.models
 				this._tagValue = value;
 			}
 		}
-		public long timestamp
+		public long measureTime
 		{
 			get
 			{
-				return this._timestamp;
+				return this._measureTime;
 			}
 			set
 			{
-				this._timestamp = value;
+				this._measureTime = value;
 			}
 		}
 		public virtual object Get(int fieldPos)
@@ -67,7 +67,7 @@ namespace schneider.poem.models
 			{
 			case 0: return this.tagName;
 			case 1: return this.tagValue;
-			case 2: return this.timestamp;
+			case 2: return this.measureTime;
 			default: throw new AvroRuntimeException("Bad index " + fieldPos + " in Get()");
 			};
 		}
@@ -77,7 +77,7 @@ namespace schneider.poem.models
 			{
 			case 0: this.tagName = (System.String)fieldValue; break;
 			case 1: this.tagValue = (System.Double)fieldValue; break;
-			case 2: this.timestamp = (System.Int64)fieldValue; break;
+			case 2: this.measureTime = (System.Int64)fieldValue; break;
 			default: throw new AvroRuntimeException("Bad index " + fieldPos + " in Put()");
 			};
 		}

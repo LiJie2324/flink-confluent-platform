@@ -5,6 +5,6 @@
   "fields": [
     {"name": "tagName", "type": "string"},
     {"name": "tagValue", "type": "double"},
-    {"name": "timestamp", "type": "long", "logicalType": "timestamp-millis"}
+    {"name": "measureTime", "type": "long", "logicalType": "timestamp-millis"}
   ]
 }

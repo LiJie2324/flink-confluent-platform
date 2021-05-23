@@ -8,7 +8,8 @@ docker exec -it taskmanager sql-client.sh
 CREATE TABLE tag_values (
   the_kafka_key STRING,
   tagName STRING,
-  tagValue DOUBLE
+  tagValue DOUBLE,
+  measureTime TIMESTAMP(3)
 ) WITH (
   'connector' = 'kafka',
   'topic' = 'tag-values',
@@ -21,5 +22,5 @@ CREATE TABLE tag_values (
   'value.avro-confluent.schema-registry.url' = 'http://schema-registry:8081',
   'value.fields-include' = 'EXCEPT_KEY'
 );
-select * from tag_values;
+SELECT * FROM tag_values;
 ```
