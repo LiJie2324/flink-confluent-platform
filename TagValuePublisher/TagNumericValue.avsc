@@ -1,0 +1,10 @@
+{
+  "namespace": "schneider.poem.models",
+  "type": "record",
+  "name": "TagNumericValue",
+  "fields": [
+    {"name": "tagName", "type": "string"},
+    {"name": "tagValue", "type": "double"},
+    {"name": "timestamp", "type": "long", "logicalType": "timestamp-millis"}
+  ]
+}
