@@ -1,6 +1,16 @@
 ---
   version: '2'
   services:
+    tag-value-publisher:
+      image: warrenhuang/tag-value-publisher:202105232043
+      container_name: tag-value-publisher
+      depends_on:
+        - broker
+        - schema-registry
+      environment:
+        KAFKA_BOOTSTRAP_SERVERS: 'broker:29092'
+        KAFKA_SCHEMA_REGISTRY_URL: 'http://schema-registry:8081'
+
     jobmanager:
       image: flink:1.13.0-scala_2.12-java11
       container_name: jobmanager
